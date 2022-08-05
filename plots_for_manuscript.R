@@ -6,6 +6,7 @@
 ## Date: Mar.1, 2022
 #############################################################
 
+# ***************************************** Plots for manuscript ***************************************** #
 
 setwd("/Users/yili/Desktop/regmedint_DGP_plots/MAN_PLOTS_SELECTED")
 # common legend
@@ -268,7 +269,7 @@ for(s in 1:4){
 }
 
 ### 3. Figure 4. Misspecified ###
-pdf("Misspecified-Model_Combine_M1-4.pdf", height = 11, width = 13)
+pdf("Misspecified-Model_Combine_M1-4.pdf", height = 11, width = 15)
 # Model 1: s = 1 to 4, c = 2
 m = 1; c = 2
 for(s in 1:4){

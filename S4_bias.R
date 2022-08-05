@@ -17,7 +17,7 @@ for(s in 1:4){
   }
 }
 
-
+# Note: bias is on the same scale as NDE and NIE:
 for(s in 1:4){ # loop over 4 scenarios
   for(m in 1:4){ # loop over 4 models
     for(c in 1:3){ # loop over 3 levels of coefficients of C

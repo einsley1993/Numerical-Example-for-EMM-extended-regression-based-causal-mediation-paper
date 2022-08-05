@@ -1,14 +1,16 @@
 
-################################################################################
-#======================== All plots for supplement doc ========================#
-################################################################################
 
+#############################################################
+## Author: Yi Li
+## Date: Mar.1, 2022
+#############################################################
+
+# ***************************************** Plots for Supplement ***************************************** #
 # run correct and misspecified R codes first
 # truth vs. misspecified plots side by side
 
 library(cowplot)
 # plot_grid(): multiplots function
-
 # cowplot will change the theme automatically. 
 # if want to change back to default theme set: + theme_set(theme_gray())
 
@@ -45,7 +47,7 @@ for(s in 1:4){
     # now add the title
       title <- ggdraw() +
       draw_label(
-        paste0("Scenario", s, ": ", 
+        paste0("Scenario ", s, ": ", 
                model.temp.new[[1]][m], " mediator model", ", ", 
                model.temp.new[[2]][m], " outcome model"),
         fontfamily = "sans",

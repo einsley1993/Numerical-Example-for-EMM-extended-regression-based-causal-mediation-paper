@@ -1,21 +1,11 @@
 
-
-
 #############################################################
 ## Author: Yi Li
 ## Date: Mar.1, 2022
 #############################################################
 
 getwd()
-
-library(ggplot2)
-library("regmedint")
 library(locfit) # for expit()
-library(reshape)
-
-library(grid)
-library(gridExtra)
-
 
 # ***************************************** Generate Data *****************************************#
 set.seed(3104)
@@ -42,7 +32,7 @@ datamaker.s1.m3 = function(n, k){
   C <- matrix(rnorm(n*1, 0, 2), ncol = 1)
   A <- rbinom(n, 1, expit(C + C^2))
   M <- (0.2 + 0.4*A + 0.5*C + 0.0*A*C + rnorm(n, 0, 0.5))
-  Y <- rbinom(n, 1, expit(0.5 + 0.3*A + 0.2*M + k*A*M + 0.1*C + 0.0*A*C + 0.0*M*C)/10)
+  Y <- rbinom(n, 1, expit(-5 + 0.3*A + 0.2*M + k*A*M + 0.1*C + 0.0*A*C + 0.0*M*C))
   list(C = C, A = A, M = M, Y = Y)
 } 
 
@@ -51,7 +41,7 @@ datamaker.s1.m4 = function(n, k){
   C <- matrix(rnorm(n*1, 0, 2), ncol = 1)
   A <- rbinom(n, 1, expit(C + C^2))
   M <- rbinom(n, 1, expit(0.2 + 0.4*A + 0.5*C + 0.0*A*C))
-  Y <- rbinom(n, 1, expit(0.5 + 0.3*A + 0.2*M + k*A*M + 0.1*C + 0.0*A*C + 0.0*M*C)/10)
+  Y <- rbinom(n, 1, expit(-5 + 0.3*A + 0.2*M + k*A*M + 0.1*C + 0.0*A*C + 0.0*M*C))
   list(C = C, A = A, M = M, Y = Y)
 } 
 
@@ -81,7 +71,7 @@ datamaker.s2.m3 = function(n, k){
   C <- matrix(rnorm(n*1, 0, 2), ncol = 1)
   A <- rbinom(n, 1, expit(C + C^2))
   M <- (0.2 + 0.4*A + 0.5*C + k*A*C + rnorm(n, 0, 0.5))
-  Y <- rbinom(n, 1, expit(0.5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + 0.0*A*C + 0.0*M*C)/10)
+  Y <- rbinom(n, 1, expit(-5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + 0.0*A*C + 0.0*M*C))
   list(C = C, A = A, M = M, Y = Y)
 } 
 
@@ -90,7 +80,7 @@ datamaker.s2.m4 = function(n, k){
   C <- matrix(rnorm(n*1, 0, 2), ncol = 1)
   A <- rbinom(n, 1, expit(C + C^2))
   M <- rbinom(n, 1, expit(0.2 + 0.4*A + 0.5*C + k*A*C))
-  Y <- rbinom(n, 1, expit(0.5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + 0.0*A*C + 0.0*M*C)/10)
+  Y <- rbinom(n, 1, expit(-5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + 0.0*A*C + 0.0*M*C))
   list(C = C, A = A, M = M, Y = Y)
 } 
 
@@ -118,7 +108,7 @@ datamaker.s3.m3 = function(n, k){
   C <- matrix(rnorm(n*1, 0, 2), ncol = 1)
   A <- rbinom(n, 1, expit(C + C^2))
   M <- (0.2 + 0.4*A + 0.5*C + 0.2*A*C + rnorm(n, 0, 0.5))
-  Y <- rbinom(n, 1, expit(0.5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + k*A*C + 0.0*M*C)/10)
+  Y <- rbinom(n, 1, expit(-5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + k*A*C + 0.0*M*C))
   list(C = C, A = A, M = M, Y = Y)
 } 
 
@@ -127,7 +117,7 @@ datamaker.s3.m4 = function(n, k){
   C <- matrix(rnorm(n*1, 0, 2), ncol = 1)
   A <- rbinom(n, 1, expit(C + C^2))
   M <- rbinom(n, 1, expit(0.2 + 0.4*A + 0.5*C + 0.2*A*C))
-  Y <- rbinom(n, 1, expit(0.5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + k*A*C + 0.0*M*C)/10)
+  Y <- rbinom(n, 1, expit(-5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + k*A*C + 0.0*M*C))
   list(C = C, A = A, M = M, Y = Y)
 } 
 
@@ -157,7 +147,7 @@ datamaker.s4.m3 = function(n, k){
   C <- matrix(rnorm(n*1, 0, 2), ncol = 1)
   A <- rbinom(n, 1, expit(C + C^2))
   M <- (0.2 + 0.4*A + 0.5*C + 0.2*A*C + rnorm(n, 0, 0.5))
-  Y <- rbinom(n, 1, expit(0.5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + 0.2*A*C + k*M*C)/10)
+  Y <- rbinom(n, 1, expit(-10 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + 0.2*A*C + k*M*C))
   list(C = C, A = A, M = M, Y = Y)
 } 
 
@@ -166,7 +156,7 @@ datamaker.s4.m4 = function(n, k){
   C <- matrix(rnorm(n*1, 0, 2), ncol = 1)
   A <- rbinom(n, 1, expit(C + C^2))
   M <- rbinom(n, 1, expit(0.2 + 0.4*A + 0.5*C + 0.2*A*C))
-  Y <- rbinom(n, 1, expit(0.5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + 0.2*A*C + k*M*C)/10)
+  Y <- rbinom(n, 1, expit(-5 + 0.3*A + 0.2*M + 0.5*A*M + 0.1*C + 0.2*A*C + k*M*C))
   list(C = C, A = A, M = M, Y = Y)
 } 
 
@@ -209,8 +199,50 @@ for(s in 1:4){
 
 
 
+# Check if binary Y is rare:
+# dat[[s]][[m]][[c]]: 
+# Model 3: OK
+for(j in 1:4){
+  for(k in 1:3){
+    print(paste("s=", j, "c=", k, ",", mean(dat[[j]][[3]][[k]]$Y))) 
+  }
+}
+# [1] "s= 1 c= 1 , 0.0092"
+# [1] "s= 1 c= 2 , 0.0202"
+# [1] "s= 1 c= 3 , 0.0322"
+# [1] "s= 2 c= 1 , 0.0218"
+# [1] "s= 2 c= 2 , 0.0314"
+# [1] "s= 2 c= 3 , 0.044"
+# [1] "s= 3 c= 1 , 0.039"
+# [1] "s= 3 c= 2 , 0.0656"
+# [1] "s= 3 c= 3 , 0.0908"
+# [1] "s= 4 c= 1 , 0.0116"
+# [1] "s= 4 c= 2 , 0.0506"
+# [1] "s= 4 c= 3 , 0.0874"
 
-# ***************************************** Create Function *****************************************#
+# Model 4: OK
+for(j in 1:4){
+  for(k in 1:3){
+    print(paste("s=", j, "c=", k, ",", mean(dat[[j]][[4]][[k]]$Y))) 
+  }
+}
+
+# [1] "s= 1 c= 1 , 0.0092"
+# [1] "s= 1 c= 2 , 0.0134"
+# [1] "s= 1 c= 3 , 0.0156"
+# [1] "s= 2 c= 1 , 0.0108"
+# [1] "s= 2 c= 2 , 0.0156"
+# [1] "s= 2 c= 3 , 0.016"
+# [1] "s= 3 c= 1 , 0.0166"
+# [1] "s= 3 c= 2 , 0.028"
+# [1] "s= 3 c= 3 , 0.0492"
+# [1] "s= 4 c= 1 , 0.0296"
+# [1] "s= 4 c= 2 , 0.0532"
+# [1] "s= 4 c= 3 , 0.084"
+
+
+
+# ***************************************** regmedint_new() *****************************************#
 # ====== Add AxC, MxC product terms ====== #
 regmedint_new <- function(data, m_model, y_model, 
                           yvar, avar, mvar, cvar, 

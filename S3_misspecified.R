@@ -8,7 +8,6 @@
 
 
 # ***************************************** Fit misspecified model ***************************************** #
-
 sim.mis.out <- list()
 for(s in 1:4){
   sim.mis.out[[s]] <- list()

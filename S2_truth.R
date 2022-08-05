@@ -6,20 +6,14 @@
 ## Date: Mar.1, 2022
 #############################################################
 
-# ***************************************** True Effects ***************************************** #
-
 library(ggplot2)
-library("regmedint")
-library(locfit) # for expit()
 library(reshape)
 
 library(grid)
 library(gridExtra)
 
-
-set.seed(3104)
-
-# varying coefficient
+# ***************************************** True Effects ***************************************** #
+# vary coefficient
 value <- as.data.frame(matrix(data = NA, nrow = 3, ncol = 4))
 colnames(value) <- c("s1", "s2", "s3", "s4")
 value[,1] <- c(0, 0.5, 0.8)
@@ -42,18 +36,19 @@ for(s in 1:4){
   }
 }
 
-for(m in c(1, 2, 4)){
+# m = 1, 2: Models 1 & 2
+for(m in c(1, 2)){
   for(k in 1:3){
-    # Scenario 1; Model 1,2,4
+    # Scenario 1; Model 1,2
     b[[1]][[m]][[k]] <- c(0.2, 0.4, 0.5, 0)
     th[[1]][[m]][[k]] <- c(0.5, 0.3, 0.2, value[k,1], 0.1, 0, 0)
-    # Scenario 2; Model 1,2,4
+    # Scenario 2; Model 1,2
     b[[2]][[m]][[k]] <- c(0.2, 0.4, 0.5, value[k,2])
     th[[2]][[m]][[k]] <- c(0.5, 0.3, 0.2, 0.5, 0.1, 0, 0)
-    # Scenario 3; Model 1,2,4
+    # Scenario 3; Model 1,2
     b[[3]][[m]][[k]] <- c(0.2, 0.4, 0.5, 0.2)
     th[[3]][[m]][[k]] <- c(0.5, 0.3, 0.2, 0.5, 0.1, value[k,3], 0)
-    # Scenario 4; Model 1,2,4
+    # Scenario 4; Model 1,2
     b[[4]][[m]][[k]] <- c(0.2, 0.4, 0.5, 0.2)
     th[[4]][[m]][[k]] <- c(0.5, 0.3, 0.2, 0.5, 0.1, 0.2, value[k,4])
   }
@@ -63,16 +58,32 @@ for(m in c(1, 2, 4)){
 for(k in 1:3){
   # Scenario 1
   b[[1]][[3]][[k]] <- c(0.2, 0.4, 0.5, 0)
-  th[[1]][[3]][[k]] <- c(0.5, 0.3, 0.2, value[k,1], 0.1, 0, 0)/10
+  th[[1]][[3]][[k]] <- c(-5, 0.3, 0.2, value[k,1], 0.1, 0, 0)
   # Scenario 2
   b[[2]][[3]][[k]] <- c(0.2, 0.4, 0.5, value[k,2])
-  th[[2]][[3]][[k]] <- c(0.5, 0.3, 0.2, 0.5, 0.1, 0, 0)/10
+  th[[2]][[3]][[k]] <- c(-5, 0.3, 0.2, 0.5, 0.1, 0, 0)
   # Scenario 3
   b[[3]][[3]][[k]] <- c(0.2, 0.4, 0.5, 0.2)
-  th[[3]][[3]][[k]] <- c(0.5, 0.3, 0.2, 0.5, 0.1, value[k,3], 0)/10
+  th[[3]][[3]][[k]] <- c(-5, 0.3, 0.2, 0.5, 0.1, value[k,3], 0)
   # Scenario 4
   b[[4]][[3]][[k]] <- c(0.2, 0.4, 0.5, 0.2)
-  th[[4]][[3]][[k]] <- c(0.5, 0.3, 0.2, 0.5, 0.1, 0.2, value[k,4])/10
+  th[[4]][[3]][[k]] <- c(-10, 0.3, 0.2, 0.5, 0.1, 0.2, value[k,4])
+}
+
+# m = 4: Model 4
+for(k in 1:3){
+  # Scenario 1
+  b[[1]][[4]][[k]] <- c(0.2, 0.4, 0.5, 0)
+  th[[1]][[4]][[k]] <- c(-5, 0.3, 0.2, value[k,1], 0.1, 0, 0)
+  # Scenario 2
+  b[[2]][[4]][[k]] <- c(0.2, 0.4, 0.5, value[k,2])
+  th[[2]][[4]][[k]] <- c(-5, 0.3, 0.2, 0.5, 0.1, 0, 0)
+  # Scenario 3
+  b[[3]][[4]][[k]] <- c(0.2, 0.4, 0.5, 0.2)
+  th[[3]][[4]][[k]] <- c(-5, 0.3, 0.2, 0.5, 0.1, value[k,3], 0)
+  # Scenario 4
+  b[[4]][[4]][[k]] <- c(0.2, 0.4, 0.5, 0.2)
+  th[[4]][[4]][[k]] <- c(-5, 0.3, 0.2, 0.5, 0.1, 0.2, value[k,4])
 }
 
 
@@ -90,7 +101,6 @@ for(s in 1:4){
     TE <- NDE + NIE
     est[[s]][[1]][[k]] <- cbind.data.frame(NDE, NIE, TE)
     
-    
     # Model 2:
     NDE <- (a1 - a0)*(theta[2] + theta[4]*(expit(beta[1] + beta[2]*a0 + beta[3]*c_cond + beta[4]*a0*c_cond)) + theta[6]*c_cond)
     NIE <- (theta[3] + theta[4]*a1 + theta[7]*c_cond)*
@@ -99,7 +109,6 @@ for(s in 1:4){
     TE <- NDE + NIE
     est[[s]][[2]][[k]] <- cbind.data.frame(NDE, NIE, TE)
 
-    
     # Model 3:
     sigma2 = 0 # truth
     NDE <- exp((theta[2] + theta[6]*c_cond + 
@@ -108,7 +117,6 @@ for(s in 1:4){
     NIE <- exp((a1 - a0)*(theta[3] + theta[4]*a1 + theta[7]*c_cond)*(beta[2] + beta[4]*c_cond))
     TE <- NDE * NIE
     est[[s]][[3]][[k]] <- cbind.data.frame(NDE, NIE, TE)
-    
     
     # Model 4:
     NDE <- exp((a1 - a0)*(theta[2] + theta[6]*c_cond))*
